@@ -129,7 +129,6 @@ func in_loop(prev *map[guard]struct{}, g guard) bool {
 }
 
 func traverse(grid *[]string, g guard) bool {
-
 	prev := make(map[guard]struct{})
 
 	for inbounds(grid, g.pos) && !in_loop(&prev, g) {
@@ -169,13 +168,15 @@ func main() {
 	fmt.Printf("Part 1: %d\n", count_markers(&grid, 'X'))
 
 	loop_count := 0
-	for i, row := range original_grid {
+	for i, row := range grid {
 		for j, mark := range row {
-			if mark == '.' {
-				grid := make([]string, len(original_grid))
-				copy(grid, original_grid)
-				mark_grid(&grid, point{i, j}, '#')
-				if traverse(&grid, g) {
+			// If the tile was not hit in the original traversal, it won't
+			// be hit by adding an extra barrier there. We can skip those.
+			if mark == 'X' {
+				modified_grid := make([]string, len(original_grid))
+				copy(modified_grid, original_grid)
+				mark_grid(&modified_grid, point{i, j}, '#')
+				if traverse(&modified_grid, g) {
 					loop_count++
 				}
 			}
