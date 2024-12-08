@@ -80,6 +80,9 @@ func is_solvable(eq equation, allowed_ops []operator) bool {
 				result = concat(result, eq.operands[i+1])
 			}
 			ops_c /= len(allowed_ops)
+			if result > eq.result {
+				break
+			}
 		}
 		if result == eq.result {
 			return true
